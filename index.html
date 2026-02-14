@@ -9,17 +9,17 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   text-align: center;
-  color: #fff;
+  color: white;
 }
 
 .card {
-  background: rgba(0,0,0,0.25);
+  background: rgba(0,0,0,0.3);
   padding: 30px;
   border-radius: 20px;
   width: 90%;
@@ -35,10 +35,10 @@ button {
   cursor: pointer;
 }
 
-.yes { background: #00e676; color: black; }
-.no { background: #ff5252; color: white; }
+.yes { background:#00e676; color:black; }
+.no { background:#ff5252; color:white; }
 
-#result { margin-top: 20px; font-size: 22px; }
+#result { margin-top:20px; font-size:22px; }
 </style>
 </head>
 
@@ -55,63 +55,80 @@ button {
 </div>
 
 <script>
-/************** PERSONALISE HERE **************/
+/************** AUTO NAME FROM URL **************/
+const params = new URLSearchParams(window.location.search);
+const HER_NAME = params.get("name") || "Beautiful";
 const YOUR_NAME = "Ravi";
-const HER_NAME = "Afreen";
+/***********************************************/
 
-const MESSAGE = `
-${HER_NAME}, you are very special to me 💞  
-Will you be mine forever?
-`;
-
-// Optional music link (MP3 URL)
-// leave "" if you don’t want music
-const MUSIC_URL = "";
-/*********************************************/
-
+/************** MAIN MESSAGE *******************/
 document.getElementById("title").innerText =
   `Dear ${HER_NAME} ❤️`;
 
 document.getElementById("message").innerText =
-  MESSAGE;
+  `${HER_NAME}, you are very special to me 💞
+Will you be mine Valentine?`;
+/***********************************************/
+
+/************** NO BUTTON MESSAGES ************/
+const noMessages = [
+  "Please think again 😢",
+  "Are you sure? 💔",
+  "I will wait for you ❤️",
+  "Don't break my heart 🥺",
+  "Give me one chance 💞",
+  "Maybe you clicked wrong 😭"
+];
+
+let noIndex = 0;
+/***********************************************/
+
+/************** BUILT-IN MUSIC *****************/
+const audio = new Audio(
+"https://cdn.pixabay.com/download/audio/2022/03/15/audio_8c5d6a2f1a.mp3"
+);
+/***********************************************/
 
 function sayYes() {
+
   document.getElementById("result").innerHTML =
-    `💖 Yaaay! I love you ${HER_NAME}! 💖<br>
-     — Yours, ${YOUR_NAME}`;
+    `💖 Yaaay ${HER_NAME}! 💖<br>
+     You made ${YOUR_NAME} the happiest person ❤️`;
 
-  fireworks();
-
-  if (MUSIC_URL) {
-    const audio = new Audio(MUSIC_URL);
-    audio.play();
-  }
+  audio.play();
+  heartsExplosion();
 }
 
 function sayNo() {
-  document.getElementById("result").innerHTML =
-    `😢 Please think again ${HER_NAME}...`;
+
+  document.getElementById("result").innerText =
+    noMessages[noIndex];
+
+  noIndex = (noIndex + 1) % noMessages.length;
 }
 
-/******** FIREWORKS ********/
-function fireworks() {
-  for (let i = 0; i < 30; i++) {
-    const f = document.createElement("div");
-    f.innerText = "💖";
-    f.style.position = "fixed";
-    f.style.left = Math.random()*100 + "vw";
-    f.style.top = "100vh";
-    f.style.fontSize = "30px";
-    document.body.appendChild(f);
+/************** HEART EXPLOSION ***************/
+function heartsExplosion() {
+
+  for (let i = 0; i < 40; i++) {
+
+    const h = document.createElement("div");
+    h.innerText = "💖";
+    h.style.position = "fixed";
+    h.style.left = Math.random()*100 + "vw";
+    h.style.top = "100vh";
+    h.style.fontSize = (20 + Math.random()*20) + "px";
+    document.body.appendChild(h);
 
     let pos = 100;
+
     const fall = setInterval(() => {
       if (pos < -10) {
         clearInterval(fall);
-        f.remove();
+        h.remove();
       }
       pos -= 1.5;
-      f.style.top = pos + "vh";
+      h.style.top = pos + "vh";
     }, 20);
   }
 }
